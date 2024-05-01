@@ -1,1 +1,9 @@
-/*# sourceMappingURL=App.css.map */
+.homeContainer {
+  display: flex;
+}
+
+@media screen and (max-width: 768px) {
+  .homeContainer {
+    flex-direction: column;
+  }
+}/*# sourceMappingURL=App.css.map */

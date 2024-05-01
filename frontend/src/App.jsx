@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Topbar from "./components/Topbar/Topbar.jsx";
 import Home from "./pages/Home.jsx";
+import SinglePostPage from "./pages/SinglePostPage.jsx";
 import "./styling/app/App.css";
 
 function App() {
@@ -9,13 +10,9 @@ function App() {
   return (
     <>
       <Topbar />
-      <p>test</p>
-      <p>test</p>
-      <p>test</p>
-      <p>test</p>
-      <p>test</p>
-      <p>test</p>
-      <p>test</p>
+      {/* <Home />
+       */}
+      <SinglePostPage />
     </>
   );
 }

@@ -1,14 +1,15 @@
 import Posts from "../components/posts/Posts";
 import Sidebar from "../components/sidebar/Sidebar";
+import Header from "../components/header/Header";
 
 export default function Home() {
   return (
-    <div className="home">
-      Homepage
+    <>
+      <Header />
       <div className="homeContainer">
         <Posts />
         <Sidebar />
       </div>
-    </div>
+    </>
   );
 }

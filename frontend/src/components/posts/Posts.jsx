@@ -1,10 +1,15 @@
-import "./styling/Posts.css";
+import "./styling/posts.css";
+import Post from "../post/Post";
 
 export default function Posts() {
   return (
     <div className="posts">
-      Posts
-      <div className="postsContainer"></div>
+      <Post />
+      <Post />
+      <Post />
+      <Post />
+      <Post />
+      {/* <div className="postsContainer"></div> */}
     </div>
   );
 }
