@@ -2,8 +2,12 @@
   padding-top: 50px;
 }
 
+.writeImgContainer {
+  display: flex;
+  justify-content: center;
+}
+
 .writeImg {
-  margin-left: 150px;
   width: 70vw;
   height: 250px;
   border-radius: 10px;
@@ -16,9 +20,12 @@
 }
 
 .writeFormGroup {
-  margin-left: 150px;
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 70vw;
 }
 
 .writeIcon {
@@ -65,7 +72,7 @@
 .writeSubmit {
   position: absolute;
   top: 20px;
-  right: 50px;
+  right: 15%;
   color: white;
   background-color: teal;
   padding: 10px;
