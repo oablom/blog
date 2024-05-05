@@ -1,4 +1,5 @@
-import "../Topbar/styling/topbar.css";
+import { Link } from "react-router-dom";
+import "./styling/topbar.css";
 
 export default function Topbar() {
   const user = true;
@@ -13,27 +14,22 @@ export default function Topbar() {
       <div className="topCenter">
         <ul className="topList">
           <li className="topListItem">
-            {/* <Link className="link" to="/">
+            <Link className="link" to="/">
               HOME
-            </Link> */}
+            </Link>
           </li>
           <li className="topListItem">ABOUT</li>
           <li className="topListItem">CONTACT</li>
           <li className="topListItem">
-            {/* <Link className="link" to="/write">
+            <Link className="link" to="/write">
               WRITE
-            </Link> */}
+            </Link>
           </li>
           {user && <li className="topListItem">LOGOUT</li>}
         </ul>
       </div>
       <div className="topRight">
-        <img
-          className="topImg"
-          src="https://images.pexels.com/photos/1858175/pexels-photo-1858175.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-          alt=""
-        />
-        {/* {user ? (
+        {user ? (
           <Link className="link" to="/settings">
             <img
               className="topImg"
@@ -54,7 +50,7 @@ export default function Topbar() {
               </Link>
             </li>
           </ul>
-        )} */}
+        )}
         <i className="topSearchIcon fas fa-search"></i>
       </div>
     </div>

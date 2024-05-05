@@ -1,5 +1,10 @@
 .homeContainer {
   display: flex;
+  flex-direction: row;
+}
+
+.single {
+  display: flex;
 }
 
 @media screen and (max-width: 768px) {
