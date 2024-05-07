@@ -11,6 +11,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   const [count, setCount] = useState(0);
+  const user = false;
 
   return (
     <Router>
@@ -18,15 +19,15 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/posts" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/write" element={<Write />} />
+        <Route path="/login" element={user ? <Home /> : <Login />} />
+        <Route path="/register" element={user ? <Home /> : <Register />} />
+        <Route path="/write" element={user ? <Home /> : <Write />} />
         {/* <Route path="/register" element={currentUser ? <Home /> : <Register />} />
         
         <Route path="/post/:id" element={<Single />} />
        
         <Route path="/settings" element={currentUser ? <Settings /> : <Login />} /> */}
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/settings" element={user ? <Home /> : <Settings />} />
       </Routes>
     </Router>
   );

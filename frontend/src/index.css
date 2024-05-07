@@ -2,3 +2,8 @@
   min-width: fit-content;
   height: 100vh;
 }
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
