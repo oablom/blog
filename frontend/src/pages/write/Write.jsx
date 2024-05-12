@@ -11,26 +11,33 @@ export default function Write() {
   const { user } = useContext(Context);
 
   const handleSubmit = async (e) => {
-    console.log("handleSubmit körs");
     e.preventDefault();
     const newPost = {
-      username: user.username,
+      username: user.user.username,
       title,
       desc,
     };
 
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
     if (file) {
-      const fileExtension = file.name.split(".").pop(); // Hämtar filändelsen
-      const filename = uuidv4() + "." + fileExtension; // Använder UUID istället för Date.now()
+      const fileExtension = file.name.split(".").pop();
+      const filename = uuidv4() + "." + fileExtension;
       const formData = new FormData();
       formData.append("name", filename);
-      formData.append("file", file); // Se till att denna rad är o-kommenterad
+      formData.append("file", file);
       newPost.photo = filename;
 
       try {
         await axios.post("http://localhost:5000/api/upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${user.token}`,
           },
         });
       } catch (err) {
@@ -39,7 +46,11 @@ export default function Write() {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/posts", newPost);
+      const res = await axios.post(
+        "http://localhost:5000/api/posts",
+        newPost,
+        config
+      );
       window.location.replace("http://localhost:5173/post/" + res.data._id);
     } catch (err) {
       console.log(err);

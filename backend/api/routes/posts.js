@@ -2,11 +2,12 @@ const mongoose = require("mongoose");
 const router = require("express").Router();
 const Post = require("../models/Post");
 const User = require("../models/User");
+const { authenticate } = require("../middleware/authAndAdminCheck");
 
 //Create Post
 
-router.post("/", async (req, res) => {
-  const newPost = new Post(req.body);
+router.post("/", authenticate, async (req, res) => {
+  const newPost = new Post({ ...req.body, username: req.user.username });
   try {
     const savedPost = await newPost.save();
     res.status(200).json(savedPost);
@@ -18,10 +19,10 @@ router.post("/", async (req, res) => {
 
 //Update Post
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", authenticate, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (post.username === req.body.username) {
+    if (post.username === req.user.username) {
       try {
         const updatedPost = await Post.findByIdAndUpdate(
           req.params.id,
@@ -42,14 +43,14 @@ router.put("/:id", async (req, res) => {
 
 //Delete Post
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authenticate, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) {
       res.status(404).json("Inlägg hittades inte.");
       return;
     }
-    if (post.username === req.body.username) {
+    if (post.username === req.user.username) {
       try {
         await post.deleteOne();
         res.status(200).json("Inlägget har raderats...");

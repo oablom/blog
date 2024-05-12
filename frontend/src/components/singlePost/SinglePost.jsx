@@ -15,6 +15,32 @@ export default function SinglePost() {
   const [title, setTitle] = useState(post.title);
   const [desc, setDesc] = useState(post.desc);
   const [updateMode, setUpdateMode] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [commentBody, setCommentBody] = useState("");
+
+  const token = localStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  const isAdmin = user?.user.isAdmin === true;
+  console.log("isAdmin", isAdmin);
+
+  const handleDeleteComment = async (commentId) => {
+    if (window.confirm("Är du säker på att du vill ta bort denna kommentar?")) {
+      try {
+        await axios.delete(`http://localhost:5000/api/comments/${commentId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setComments(comments.filter((comment) => comment._id !== commentId));
+      } catch (err) {
+        console.error("Fel vid borttagning av kommentar:", err);
+      }
+    }
+  };
 
   useEffect(() => {
     const getPost = async () => {
@@ -31,12 +57,31 @@ export default function SinglePost() {
     getPost();
   }, [path]);
 
+  useEffect(() => {
+    const fetchComments = async () => {
+      if (post._id) {
+        try {
+          const res = await axios.get(
+            `http://localhost:5000/api/comments/${post._id}`
+          );
+          setComments(res.data);
+        } catch (err) {
+          console.error("Error fetching comments:", err);
+        }
+      }
+    };
+    fetchComments();
+  }, [post._id]);
+
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this post?")) {
       try {
         await axios.delete(`http://localhost:5000/api/posts/${path}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
           data: {
-            username: user.username,
+            username: user.user.username,
           },
         });
         window.location.replace("/");
@@ -50,14 +95,44 @@ export default function SinglePost() {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/posts/${path}`, {
-        username: user.username,
-        title: title,
-        desc: desc,
-      });
+      await axios.put(
+        `http://localhost:5000/api/posts/${path}`,
+        {
+          username: user.user.username,
+          title: title,
+          desc: desc,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
       window.location.replace(`/post/${path}`);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const handleCommentSubmit = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/comments",
+        {
+          body: commentBody,
+          username: user.user.username,
+          postId: post._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setComments([...comments, res.data]);
+      setCommentBody("");
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -86,7 +161,7 @@ export default function SinglePost() {
         ) : (
           <h1 className="singlePostTitle">
             {post.title}
-            {post.username === user?.username && (
+            {post.username === user?.user.username && (
               <div className="singlePostEdit">
                 <i
                   className="singlePostIcon far fa-edit"
@@ -123,6 +198,40 @@ export default function SinglePost() {
             Update
           </button>
         )}
+
+        <div>
+          {comments.map((comment) => (
+            <div key={comment._id} className="comment">
+              <div>
+                <p className="commentUsername">{comment.username}:</p>
+                <p className="commentDate">
+                  {new Date(comment.createdAt).toLocaleString()}
+                </p>
+              </div>
+              <p className="commentBody">{comment.body}</p>
+              {isAdmin && (
+                <button
+                  onClick={() => handleDeleteComment(comment._id)}
+                  className="deleteCommentButton"
+                >
+                  Ta bort kommentar
+                </button>
+              )}
+            </div>
+          ))}
+          {token && (
+            <div className="commentForm">
+              <textarea
+                value={commentBody}
+                onChange={(e) => setCommentBody(e.target.value)}
+                className="commentTextarea"
+              />
+              <button onClick={handleCommentSubmit} className="commentButton">
+                Skicka kommentar
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -7,7 +7,13 @@ export default function Topbar() {
   const { user, dispatch } = useContext(Context);
 
   const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("username");
+
     dispatch({ type: "LOGOUT" });
+
+    window.location.href = "/login";
   };
 
   return (
@@ -25,8 +31,12 @@ export default function Topbar() {
               HOME
             </Link>
           </li>
-          <li className="topListItem">ABOUT</li>
-          <li className="topListItem">CONTACT</li>
+          <li className="topListItem">
+            <Link className="link" to="/about">
+              ABOUT
+            </Link>
+          </li>
+          {/* <li className="topListItem">CONTACT</li> */}
           <li className="topListItem">
             <Link className="link" to="/write">
               WRITE
@@ -34,7 +44,7 @@ export default function Topbar() {
           </li>
           {user && (
             <li className="topListItem" onClick={handleLogout}>
-              LOGOUT
+              <button onClick={handleLogout}>Log Out</button>
             </li>
           )}
         </ul>
@@ -44,7 +54,7 @@ export default function Topbar() {
           <Link className="link" to="/settings">
             <img
               className="topImg"
-              src={user.profilePicture}
+              src={user.user.profilePicture}
               alt="Profile picture"
             />
           </Link>

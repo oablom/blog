@@ -5,27 +5,49 @@ import Write from "./pages/write/Write.jsx";
 import Login from "./pages/login/Login.jsx";
 import Register from "./pages/register/Register.jsx";
 import Single from "./pages/single/Single.jsx";
+import About from "./pages/about/About.jsx";
+import { useState, useEffect } from "react";
 
 import "./styling/app/App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState } from "react";
-import { useContext } from "react";
-import { Context } from "./context/Context";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const { user } = useContext(Context);
-  console.log(user);
+  const token = localStorage.getItem("token");
+
+  const userLoggedIn = !!token;
+
+  // useEffect(() => {
+  //   localStorage.removeItem("token");
+  //   localStorage.removeItem("user");
+  //   localStorage.removeItem("username");
+  // }, []);
 
   return (
     <Router>
       <Topbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/register" element={user ? <Home /> : <Register />} />
-        <Route path="/login" element={user ? <Home /> : <Login />} />
-        <Route path="/write" element={user ? <Write /> : <Register />} />
-        <Route path="/settings" element={user ? <Settings /> : <Register />} />
+        <Route
+          path="/register"
+          element={userLoggedIn ? <Home /> : <Register />}
+        />
+        <Route path="/login" element={userLoggedIn ? <Home /> : <Login />} />
+        <Route path="/about" element={<About />} />
+        <Route
+          path="/write"
+          element={userLoggedIn ? <Write /> : <Navigate replace to="/login" />}
+        />
+        <Route
+          path="/settings"
+          element={
+            userLoggedIn ? <Settings /> : <Navigate replace to="/login" />
+          }
+        />
         <Route path="/post/:postId" element={<Single />} />
       </Routes>
     </Router>

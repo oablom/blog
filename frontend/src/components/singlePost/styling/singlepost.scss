@@ -97,7 +97,8 @@
   outline: none;
 }
 
-.singlePostButton {
+.singlePostButton,
+.commentButton {
   width: 100px;
 
   border: none;
@@ -108,4 +109,59 @@
   cursor: pointer;
   align-self: flex-end;
   margin-top: 20px;
+}
+
+.comment {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  max-width: 50%;
+
+  div {
+    :first-child {
+      margin-top: 3px;
+    }
+    :nth-child(2) {
+      position: absolute;
+      right: 10px;
+      bottom: 0;
+      font-size: 12px;
+      color: #999;
+    }
+  }
+}
+
+.commentUsername {
+  font-weight: bold;
+  color: #333;
+}
+
+.commentBody {
+  margin-top: 5px;
+  margin-bottom: 30px;
+  color: #666;
+  max-width: 120ch;
+  word-wrap: break-word;
+}
+
+.commentForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 50%;
+  .commentTextarea {
+    width: 100%;
+    height: 100px;
+    border: 1px solid rgba(128, 128, 128, 0.212);
+    border-radius: 5px;
+    padding: 10px;
+    margin-left: 20px;
+    margin-top: 20px;
+
+    background-color: #f4f4f4;
+    border-radius: 8px;
+  }
 }
