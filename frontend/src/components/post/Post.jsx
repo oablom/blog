@@ -1,43 +1,36 @@
 import { Link } from "react-router-dom";
 import "./styling/post.css";
 
-export default function Post({ img }) {
+export default function Post({ post }) {
+  const publicFolder = "http://localhost:5000/images/";
+
   return (
-    <div className="post">
-      <img
-        className="postImg"
-        src={
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbudhE7sqEe9E4XoW5UUZ-6ci3QCF0ED9DOmXb8W26bA&s"
-        }
-        alt=""
-      />
-      <div className="postInfo">
-        {/* <div className="postCats">
-          <span className="postCat">
-            <Link className="link" to="/posts?cat=Music">
-              Music
-            </Link>
-          </span>
-          <span className="postCat">
-            <Link className="link" to="/posts?cat=Music">
-              Life
-            </Link>
+    <Link to={`/post/${post._id}`} className="link">
+      <div className="post">
+        <img
+          className="postImg"
+          src={
+            post.photo
+              ? publicFolder + post.photo
+              : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbudhE7sqEe9E4XoW5UUZ-6ci3QCF0ED9DOmXb8W26bA&s"
+          }
+          alt="Blog post image"
+        />
+        <div className="postInfo">
+          <div className="postCats">
+            {post.categories.map((category) => (
+              <span className="postCat">{category.name}</span>
+            ))}
+          </div>
+
+          <span className="postTitle">{post.title}</span>
+          <hr />
+          <span className="postDate">
+            {new Date(post.createdAt).toDateString()}
           </span>
         </div>
-        <span className="postTitle">
-          <Link to="/post/abc" className="link">
-            Lorem ipsum dolor sit amet
-          </Link>
-        </span> */}
-        <hr />
-        <span className="postDate">1 hour ago</span>
+        <p className="postDesc">{post.desc}</p>
       </div>
-      <p className="postDesc">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda
-        officia architecto deserunt deleniti? Labore ipsum aspernatur magnam
-        fugiat, reprehenderit praesentium blanditiis quos cupiditate ratione
-        atque, exercitationem quibusdam, reiciendis odio laboriosam?
-      </p>
-    </div>
+    </Link>
   );
 }

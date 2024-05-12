@@ -54,4 +54,13 @@
   border: none;
   color: white;
   border-radius: 10px;
+}
+
+button:disabled {
+  background-color: lightgray;
+  cursor: not-allowed;
+}
+
+button:hover {
+  background-color: lightblue;
 }/*# sourceMappingURL=login.css.map */

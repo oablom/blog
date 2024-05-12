@@ -2,14 +2,19 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const authRoute = require("./api/routes/auth");
-const userRoute = require("./api/routes/users");
-const postRoute = require("./api/routes/posts");
-const categoryRoute = require("./api/routes/categories");
+const authRoute = require("./routes/auth");
+const userRoute = require("./routes/users");
+const postRoute = require("./routes/posts");
+const categoryRoute = require("./routes/categories");
 const multer = require("multer");
+const cors = require("cors");
+const path = require("path");
 
 dotenv.config();
 app.use(express.json());
+app.use("/images", express.static(path.join(__dirname, "/images")));
+
+app.use(cors());
 
 mongoose
   .connect(process.env.MONGO_URL)
@@ -21,17 +26,19 @@ mongoose
   });
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "api/images");
+  destination: function (req, file, cb) {
+    cb(null, "images");
   },
-  filename: (req, file, cb) => {
-    cb(null, "img.jpg");
+  filename: function (req, file, cb) {
+    const filename = req.body.name;
+    cb(null, filename);
   },
 });
 
 const upload = multer({ storage: storage });
 app.post("/api/upload", upload.single("file"), (req, res) => {
   res.status(200).json("File has been uploaded");
+  console.log("File has been uploaded");
 });
 
 app.use("/api/auth", authRoute);

@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const router = require("express").Router();
 const Post = require("../models/Post");
 const User = require("../models/User");
@@ -5,11 +6,12 @@ const User = require("../models/User");
 //Create Post
 
 router.post("/", async (req, res) => {
-  const newPost = await new Post(req.body);
+  const newPost = new Post(req.body);
   try {
     const savedPost = await newPost.save();
     res.status(200).json(savedPost);
   } catch (err) {
+    console.error("Error saving post:", err);
     res.status(500).json(err);
   }
 });
@@ -95,7 +97,8 @@ router.get("/", async (req, res) => {
     }
     res.status(200).json(posts);
   } catch (err) {
-    res.status(500).json(err);
+    console.error("Error fetching posts:", err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
