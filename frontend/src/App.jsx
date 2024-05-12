@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Topbar from "./components/Topbar/Topbar.jsx";
 import Home from "./pages/home/Home.jsx";
 import Settings from "./pages/settings/Settings.jsx";
@@ -6,28 +5,50 @@ import Write from "./pages/write/Write.jsx";
 import Login from "./pages/login/Login.jsx";
 import Register from "./pages/register/Register.jsx";
 import Single from "./pages/single/Single.jsx";
+import About from "./pages/about/About.jsx";
+import { useState, useEffect } from "react";
+
 import "./styling/app/App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const user = false;
+  const token = localStorage.getItem("token");
+
+  const userLoggedIn = !!token;
+
+  // useEffect(() => {
+  //   localStorage.removeItem("token");
+  //   localStorage.removeItem("user");
+  //   localStorage.removeItem("username");
+  // }, []);
 
   return (
     <Router>
       <Topbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/posts" element={<Home />} />
-        <Route path="/login" element={user ? <Home /> : <Login />} />
-        <Route path="/register" element={user ? <Home /> : <Register />} />
-        <Route path="/write" element={user ? <Home /> : <Write />} />
-        {/* <Route path="/register" element={currentUser ? <Home /> : <Register />} />
-        
-        <Route path="/post/:id" element={<Single />} />
-       
-        <Route path="/settings" element={currentUser ? <Settings /> : <Login />} /> */}
-        <Route path="/settings" element={user ? <Home /> : <Settings />} />
+        <Route
+          path="/register"
+          element={userLoggedIn ? <Home /> : <Register />}
+        />
+        <Route path="/login" element={userLoggedIn ? <Home /> : <Login />} />
+        <Route path="/about" element={<About />} />
+        <Route
+          path="/write"
+          element={userLoggedIn ? <Write /> : <Navigate replace to="/login" />}
+        />
+        <Route
+          path="/settings"
+          element={
+            userLoggedIn ? <Settings /> : <Navigate replace to="/login" />
+          }
+        />
+        <Route path="/post/:postId" element={<Single />} />
       </Routes>
     </Router>
   );

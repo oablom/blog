@@ -1,8 +1,21 @@
 import { Link } from "react-router-dom";
 import "./styling/topbar.css";
+import { useContext } from "react";
+import { Context } from "../../context/Context";
 
 export default function Topbar() {
-  const user = true;
+  const { user, dispatch } = useContext(Context);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("username");
+
+    dispatch({ type: "LOGOUT" });
+
+    window.location.href = "/login";
+  };
+
   return (
     <div className="top">
       <div className="topLeft">
@@ -18,14 +31,22 @@ export default function Topbar() {
               HOME
             </Link>
           </li>
-          <li className="topListItem">ABOUT</li>
-          <li className="topListItem">CONTACT</li>
+          <li className="topListItem">
+            <Link className="link" to="/about">
+              ABOUT
+            </Link>
+          </li>
+          {/* <li className="topListItem">CONTACT</li> */}
           <li className="topListItem">
             <Link className="link" to="/write">
               WRITE
             </Link>
           </li>
-          {user && <li className="topListItem">LOGOUT</li>}
+          {user && (
+            <li className="topListItem" onClick={handleLogout}>
+              <button onClick={handleLogout}>Log Out</button>
+            </li>
+          )}
         </ul>
       </div>
       <div className="topRight">
@@ -33,8 +54,8 @@ export default function Topbar() {
           <Link className="link" to="/settings">
             <img
               className="topImg"
-              src="https://images.pexels.com/photos/1858175/pexels-photo-1858175.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-              alt=""
+              src={user.user.profilePicture}
+              alt="Profile picture"
             />
           </Link>
         ) : (
